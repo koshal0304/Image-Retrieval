@@ -1,0 +1,26 @@
+# Development files
+.git
+.conda
+.vscode
+.DS_Store
+__pycache__
+*/__pycache__
+
+# Documentation
+README.md
+VERCEL_DEPLOY.md
+*.md
+
+# Version control
+.gitignore
+
+# Test files
+**/test_*
+**/tests/
+
+# Frontend source (only need the build)
+frontend/node_modules
+frontend/public
+frontend/src
+frontend/*.json
+frontend/*.md 

@@ -14,13 +14,20 @@ import {
   Zoom,
   Badge,
   Divider,
-  Skeleton
+  Skeleton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShareIcon from '@mui/icons-material/Share';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, alpha } from '@mui/material/styles';
 import axios from 'axios';
 
@@ -82,10 +89,11 @@ const AnimatedChip = styled(Chip)(({ theme }) => ({
   }
 }));
 
-function ImageCard({ image, onToggleFavorite, delay = 0 }) {
+function ImageCard({ image, onToggleFavorite, onDelete, delay = 0 }) {
   const [expanded, setExpanded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     // Simulate loading delay for animation
@@ -112,6 +120,21 @@ function ImageCard({ image, onToggleFavorite, delay = 0 }) {
         console.error('Error toggling favorite:', error);
       }
     }
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (onDelete) {
+      onDelete(image.id);
+    }
+    setDeleteDialogOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
   };
 
   const handleImageLoad = () => {
@@ -248,64 +271,40 @@ function ImageCard({ image, onToggleFavorite, delay = 0 }) {
 
         <Divider sx={{ mx: 2, opacity: 0.6 }} />
 
-        <CardActions disableSpacing sx={{ px: 2, py: 1 }}>
-          <Tooltip title={image.favorites ? "Remove from favorites" : "Add to favorites"}>
-            <IconButton
-              aria-label="add to favorites"
-              onClick={handleFavoriteClick}
-              color={image.favorites ? 'secondary' : 'default'}
-              sx={{
-                transition: 'transform 0.2s ease-in-out, color 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'scale(1.2)',
-                  color: image.favorites ? 'secondary.main' : 'secondary.light'
-                }
-              }}
-            >
-              {image.favorites ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            </IconButton>
-          </Tooltip>
+        <CardActions disableSpacing sx={{ px: 2, py: 1, bgcolor: 'background.default' }}>
+          <IconButton 
+            onClick={handleFavoriteClick} 
+            aria-label={image.favorites ? "Remove from favorites" : "Add to favorites"}
+            color={image.favorites ? "secondary" : "default"}
+            size="small"
+          >
+            {image.favorites ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+          
+          <IconButton aria-label="View full size" size="small">
+            <VisibilityIcon />
+          </IconButton>
+          
+          <IconButton aria-label="Share image" size="small">
+            <ShareIcon />
+          </IconButton>
 
-          <Tooltip title="View details">
-            <IconButton
-              aria-label="view"
-              sx={{
-                transition: 'transform 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'scale(1.2)',
-                  color: 'primary.main'
-                }
-              }}
-            >
-              <VisibilityIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title="Share">
-            <IconButton
-              aria-label="share"
-              sx={{
-                transition: 'transform 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'scale(1.2)',
-                  color: 'primary.main'
-                }
-              }}
-            >
-              <ShareIcon />
-            </IconButton>
-          </Tooltip>
-
+          <IconButton 
+            aria-label="Delete image" 
+            size="small"
+            onClick={handleDeleteClick}
+            color="error"
+            sx={{ marginLeft: 'auto' }}
+          >
+            <DeleteIcon />
+          </IconButton>
+          
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
             aria-expanded={expanded}
-            aria-label="show more"
-            sx={{
-              '&:hover': {
-                color: 'primary.main'
-              }
-            }}
+            aria-label="Show more details"
+            size="small"
           >
             <ExpandMoreIcon />
           </ExpandMore>
@@ -371,6 +370,24 @@ function ImageCard({ image, onToggleFavorite, delay = 0 }) {
             )}
           </CardContent>
         </Collapse>
+
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={handleCancelDelete}
+        >
+          <DialogTitle>Delete Image</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this image? This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete} color="primary">Cancel</Button>
+            <Button onClick={handleConfirmDelete} color="error" variant="contained" startIcon={<DeleteIcon />}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </StyledCard>
     </Fade>
   );

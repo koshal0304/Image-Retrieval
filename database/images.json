@@ -78,19 +78,6 @@
     }
   },
   {
-    "id": 7,
-    "path": "uploads/1746597889_IMG_0899.jpg",
-    "uploaded_at": "2025-05-07T11:34:49.349895",
-    "favorites": false,
-    "tags": [],
-    "description": "",
-    "metadata": {
-      "width": 886,
-      "height": 1920,
-      "format": null
-    }
-  },
-  {
     "id": 8,
     "path": "uploads/1746597889_1.jpg",
     "uploaded_at": "2025-05-07T11:34:50.172235",
@@ -152,19 +139,6 @@
     "metadata": {
       "width": 1059,
       "height": 1270,
-      "format": null
-    }
-  },
-  {
-    "id": 13,
-    "path": "uploads/1746598905_IMG_0899.jpg",
-    "uploaded_at": "2025-05-07T11:51:45.357140",
-    "favorites": false,
-    "tags": [],
-    "description": "",
-    "metadata": {
-      "width": 886,
-      "height": 1920,
       "format": null
     }
   },
@@ -299,15 +273,15 @@
     }
   },
   {
-    "id": 24,
-    "path": "uploads/1746598910_pexels-pixabay-206359-2.jpg",
-    "uploaded_at": "2025-05-07T11:51:50.609668",
+    "id": 22,
+    "path": "uploads/1746615009_Office-Security-Cameras.jpg",
+    "uploaded_at": "2025-05-07T16:20:09.975130",
     "favorites": false,
     "tags": [],
     "description": "",
     "metadata": {
-      "width": 1920,
-      "height": 1280,
+      "width": 1200,
+      "height": 650,
       "format": null
     }
   }

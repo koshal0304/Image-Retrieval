@@ -122,6 +122,37 @@ def get_image(image_id):
         return jsonify({'image': image}), 200
     return jsonify({'error': 'Image not found'}), 404
 
+@app.route('/api/images/<int:image_id>', methods=['DELETE'])
+def delete_image(image_id):
+    """Delete an image by ID"""
+    if not MODULES_LOADED:
+        return jsonify({'error': 'System not properly initialized'}), 500
+        
+    # Get image before deletion
+    image = db.get_image(image_id)
+    if not image:
+        return jsonify({'error': 'Image not found'}), 404
+    
+    try:
+        # Delete from database
+        result = db.delete_image(image_id)
+        if not result:
+            return jsonify({'error': 'Failed to delete image from database'}), 500
+        
+        # Delete the physical file
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], image['filename'])
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        
+        # We need to rebuild the index after deleting an image to ensure consistency
+        # This could be optimized for larger collections, but for now this is simpler
+        image_index.rebuild_index(UPLOAD_FOLDER)
+        
+        return jsonify({'success': True, 'message': f"Image {image_id} deleted successfully"}), 200
+    except Exception as e:
+        print(f"Error deleting image: {e}")
+        return jsonify({'error': f'Error deleting image: {e}'}), 500
+
 @app.route('/api/images/<int:image_id>/favorite', methods=['POST'])
 def toggle_favorite(image_id):
     """Toggle favorite status for an image"""
@@ -238,9 +269,8 @@ if __name__ == '__main__':
         print("Some functionality may not work correctly.")
         print("Please run 'python setup.py' to install all required dependencies.\n")
     
-    # Use port 5002 by default on macOS to avoid AirPlay Receiver conflict
-    default_port = 5002 if sys.platform == 'darwin' else 5000
-    port = int(os.environ.get('FLASK_RUN_PORT', default_port))
+    # Get port from environment variable (for Heroku compatibility)
+    port = int(os.environ.get('PORT', 5000))
     
     print(f"Server running on http://localhost:{port}")
-    app.run(debug=True, host='0.0.0.0', port=port) 
+    app.run(debug=False, host='0.0.0.0', port=port) 

@@ -22,12 +22,14 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ImageCard from '../components/ImageCard';
 
 function CollectionsPage() {
   const [clusters, setClusters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [numClusters, setNumClusters] = useState(5);
   const [selectedCluster, setSelectedCluster] = useState(null);
   
@@ -70,6 +72,35 @@ function CollectionsPage() {
       );
     } catch (error) {
       console.error('Error toggling favorite:', error);
+    }
+  };
+  
+  const handleDeleteImage = async (imageId) => {
+    try {
+      await axios.delete(`/api/images/${imageId}`);
+      
+      // Remove the image from all clusters
+      setClusters(prevClusters => 
+        prevClusters.map(cluster => ({
+          ...cluster,
+          images: cluster.images.filter(img => img.id !== imageId)
+        }))
+      );
+      
+      setSuccessMessage('Image deleted successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      setError('Failed to delete image. Please try again later.');
+      
+      // Clear error message after 3 seconds
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
   
@@ -127,6 +158,12 @@ function CollectionsPage() {
           </Alert>
         )}
         
+        {successMessage && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {successMessage}
+          </Alert>
+        )}
+        
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
             <CircularProgress />
@@ -163,19 +200,14 @@ function CollectionsPage() {
                   <Grid container spacing={3}>
                     {cluster.images.map((image) => (
                       <Grid item xs={12} sm={6} md={4} lg={3} key={image.id}>
-                        <Card>
-                          <CardMedia
-                            component="img"
-                            height="160"
-                            image={`/static/uploads/${image.path}`}
-                            alt={image.path}
-                          />
-                          <CardContent sx={{ p: 1 }}>
-                            <Typography variant="caption" noWrap>
-                              {image.path.split('/').pop()}
-                            </Typography>
-                          </CardContent>
-                        </Card>
+                        <ImageCard 
+                          image={{
+                            ...image,
+                            path: `uploads/${image.path}`
+                          }}
+                          onToggleFavorite={handleToggleFavorite}
+                          onDelete={handleDeleteImage}
+                        />
                       </Grid>
                     ))}
                   </Grid>

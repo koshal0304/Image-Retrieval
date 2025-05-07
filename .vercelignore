@@ -1,0 +1,9 @@
+.git
+.conda
+__pycache__
+*/__pycache__
+frontend/node_modules
+models/clip
+models/pretrained
+index
+!frontend/build 

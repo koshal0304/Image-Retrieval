@@ -19,6 +19,7 @@ function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   
   useEffect(() => {
     fetchFavorites();
@@ -47,6 +48,30 @@ function FavoritesPage() {
     } catch (error) {
       console.error('Error toggling favorite:', error);
       setError('Failed to update favorite status. Please try again.');
+    }
+  };
+  
+  const handleDeleteImage = async (imageId) => {
+    try {
+      await axios.delete(`/api/images/${imageId}`);
+      
+      // Remove the image from favorites
+      setFavorites(favorites.filter(img => img.id !== imageId));
+      
+      setSuccessMessage('Image deleted successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      setError('Failed to delete image. Please try again later.');
+      
+      // Clear error message after 3 seconds
+      setTimeout(() => {
+        setError('');
+      }, 3000);
     }
   };
   
@@ -84,6 +109,12 @@ function FavoritesPage() {
         </Alert>
       )}
       
+      {successMessage && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMessage}
+        </Alert>
+      )}
+      
       {!loading && favorites.length === 0 ? (
         <Alert severity="info" sx={{ mb: 2 }}>
           You haven't favorited any images yet. Browse the gallery and click the heart icon to add images to your favorites.
@@ -95,6 +126,7 @@ function FavoritesPage() {
               <ImageCard 
                 image={image} 
                 onToggleFavorite={handleToggleFavorite} 
+                onDelete={handleDeleteImage}
               />
             </Grid>
           ))}

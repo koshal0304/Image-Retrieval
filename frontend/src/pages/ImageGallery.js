@@ -28,6 +28,7 @@ function ImageGallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -129,6 +130,40 @@ function ImageGallery() {
     }
   };
   
+  // Handle image deletion
+  const handleDeleteImage = async (imageId) => {
+    try {
+      await axios.delete(`/api/images/${imageId}`);
+      
+      // Remove the image from the current state
+      setImages(images.filter(img => img.id !== imageId));
+      
+      // Show success message
+      setSuccessMessage('Image deleted successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+      
+      // If this is the last image in the current page and not the first page, go to the previous page
+      if (images.length === 1 && page > 1) {
+        setPage(page - 1);
+      } else {
+        // Otherwise just refresh the current view
+        fetchImages();
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      setError('Failed to delete image. Please try again later.');
+      
+      // Clear error message after 3 seconds
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+    }
+  };
+  
   return (
     <Container maxWidth="lg">
       <Typography
@@ -223,6 +258,12 @@ function ImageGallery() {
         </Alert>
       )}
       
+      {successMessage && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {successMessage}
+        </Alert>
+      )}
+      
       {!loading && images.length === 0 ? (
         <Alert severity="info" sx={{ mb: 2 }}>
           No images found. Try adjusting your filters or upload some images.
@@ -234,7 +275,8 @@ function ImageGallery() {
               <Grid item xs={12} sm={6} md={4} lg={3} key={image.id}>
                 <ImageCard 
                   image={image} 
-                  onToggleFavorite={handleToggleFavorite} 
+                  onToggleFavorite={handleToggleFavorite}
+                  onDelete={handleDeleteImage}
                 />
               </Grid>
             ))}

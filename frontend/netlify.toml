@@ -1,0 +1,11 @@
+[build]
+  publish = "build"
+  command = "cd .. && pip install --upgrade pip && pip install -r requirements.txt && cd frontend && npm run build"
+
+[build.environment]
+  PYTHON_VERSION = "3.9"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

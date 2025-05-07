@@ -144,6 +144,31 @@ function SearchPage() {
   
   const selectedImage = getSelectedImageDetails();
   
+  // Handle image deletion
+  const handleDeleteImage = async (imageId) => {
+    try {
+      await axios.delete(`/api/images/${imageId}`);
+      
+      // Remove the image from results
+      setResults(results.filter(img => img.id !== imageId));
+      
+      setSuccess('Image deleted successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccess('');
+      }, 3000);
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      setError('Failed to delete image. Please try again later.');
+      
+      // Clear error message after 3 seconds
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+    }
+  };
+  
   return (
     <Container maxWidth="lg">
       <Typography
@@ -356,6 +381,7 @@ function SearchPage() {
                 <ImageCard 
                   image={image} 
                   onToggleFavorite={handleToggleFavorite} 
+                  onDelete={handleDeleteImage}
                 />
               </Grid>
             ))}
