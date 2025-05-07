@@ -1,0 +1,314 @@
+[
+  {
+    "id": 1,
+    "path": "uploads/1746597885_img123-3.png",
+    "uploaded_at": "2025-05-07T11:34:46.183454",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1024,
+      "height": 683,
+      "format": null
+    }
+  },
+  {
+    "id": 2,
+    "path": "uploads/1746597886_image.png",
+    "uploaded_at": "2025-05-07T11:34:47.121198",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1140,
+      "format": null
+    }
+  },
+  {
+    "id": 3,
+    "path": "uploads/1746597887_image 1.png",
+    "uploaded_at": "2025-05-07T11:34:48.041066",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1140,
+      "format": null
+    }
+  },
+  {
+    "id": 4,
+    "path": "uploads/1746597888_image 1-2.png",
+    "uploaded_at": "2025-05-07T11:34:48.702897",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1140,
+      "format": null
+    }
+  },
+  {
+    "id": 5,
+    "path": "uploads/1746597888_lerone-pieters-ocdsNrNPoqk-unsplash-5.jpg",
+    "uploaded_at": "2025-05-07T11:34:48.864217",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1024,
+      "height": 683,
+      "format": null
+    }
+  },
+  {
+    "id": 6,
+    "path": "uploads/1746597888_pexels-pixabay-206359-2.jpg",
+    "uploaded_at": "2025-05-07T11:34:49.107867",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1280,
+      "format": null
+    }
+  },
+  {
+    "id": 7,
+    "path": "uploads/1746597889_IMG_0899.jpg",
+    "uploaded_at": "2025-05-07T11:34:49.349895",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 886,
+      "height": 1920,
+      "format": null
+    }
+  },
+  {
+    "id": 8,
+    "path": "uploads/1746597889_1.jpg",
+    "uploaded_at": "2025-05-07T11:34:50.172235",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1280,
+      "height": 1920,
+      "format": null
+    }
+  },
+  {
+    "id": 9,
+    "path": "uploads/1746597890_2-2.jpg",
+    "uploaded_at": "2025-05-07T11:34:50.757877",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1280,
+      "format": null
+    }
+  },
+  {
+    "id": 10,
+    "path": "uploads/1746597890_3.jpg",
+    "uploaded_at": "2025-05-07T11:34:51.028216",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1280,
+      "format": null
+    }
+  },
+  {
+    "id": 11,
+    "path": "uploads/1746597891_4-2.jpg",
+    "uploaded_at": "2025-05-07T11:34:51.192634",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1080,
+      "format": null
+    }
+  },
+  {
+    "id": 12,
+    "path": "uploads/1746598904_IMG_8749 1.png",
+    "uploaded_at": "2025-05-07T11:51:45.094189",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1059,
+      "height": 1270,
+      "format": null
+    }
+  },
+  {
+    "id": 13,
+    "path": "uploads/1746598905_IMG_0899.jpg",
+    "uploaded_at": "2025-05-07T11:51:45.357140",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 886,
+      "height": 1920,
+      "format": null
+    }
+  },
+  {
+    "id": 14,
+    "path": "uploads/1746598905_1.jpg",
+    "uploaded_at": "2025-05-07T11:51:46.190418",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1280,
+      "height": 1920,
+      "format": null
+    }
+  },
+  {
+    "id": 15,
+    "path": "uploads/1746598906_2-2.jpg",
+    "uploaded_at": "2025-05-07T11:51:46.922622",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1280,
+      "format": null
+    }
+  },
+  {
+    "id": 16,
+    "path": "uploads/1746598906_3.jpg",
+    "uploaded_at": "2025-05-07T11:51:47.341634",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1280,
+      "format": null
+    }
+  },
+  {
+    "id": 17,
+    "path": "uploads/1746598907_4-2.jpg",
+    "uploaded_at": "2025-05-07T11:51:47.529499",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1080,
+      "format": null
+    }
+  },
+  {
+    "id": 18,
+    "path": "uploads/1746598907_251000425-2.jpg",
+    "uploaded_at": "2025-05-07T11:51:47.733650",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1500,
+      "height": 1120,
+      "format": null
+    }
+  },
+  {
+    "id": 19,
+    "path": "uploads/1746598907_brad-fickeisen-idoBQCx4CKA-unsplash-3.jpg",
+    "uploaded_at": "2025-05-07T11:51:48.226551",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1280,
+      "height": 1920,
+      "format": null
+    }
+  },
+  {
+    "id": 20,
+    "path": "uploads/1746598908_camera_1_image_20250205_150405-2.jpg",
+    "uploaded_at": "2025-05-07T11:51:48.407383",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1080,
+      "format": null
+    }
+  },
+  {
+    "id": 21,
+    "path": "uploads/1746598908_image 1.png",
+    "uploaded_at": "2025-05-07T11:51:49.325961",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1140,
+      "format": null
+    }
+  },
+  {
+    "id": 22,
+    "path": "uploads/1746598909_image.png",
+    "uploaded_at": "2025-05-07T11:51:50.197183",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1140,
+      "format": null
+    }
+  },
+  {
+    "id": 23,
+    "path": "uploads/1746598910_lerone-pieters-ocdsNrNPoqk-unsplash-5.jpg",
+    "uploaded_at": "2025-05-07T11:51:50.337742",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1024,
+      "height": 683,
+      "format": null
+    }
+  },
+  {
+    "id": 24,
+    "path": "uploads/1746598910_pexels-pixabay-206359-2.jpg",
+    "uploaded_at": "2025-05-07T11:51:50.609668",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1920,
+      "height": 1280,
+      "format": null
+    }
+  }
+]
