@@ -1,7 +1,0 @@
-build-essential
-libopenblas-dev
-liblapack-dev
-libblas-dev
-libatlas-base-dev
-gfortran
-pkg-config 

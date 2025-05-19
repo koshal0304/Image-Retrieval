@@ -9,4 +9,3 @@ sqlalchemy==2.0.20
 python-dotenv==1.0.0
 git+https://github.com/openai/CLIP.git
 faiss-cpu==1.7.4
-gunicorn==21.2.0

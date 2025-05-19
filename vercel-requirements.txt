@@ -1,12 +1,8 @@
 flask==2.3.3
 flask-cors==4.0.0
-pillow==9.5.0
+pillow==10.0.0
+python-dotenv==1.0.0
 numpy==1.24.3
 torch==2.0.1
 torchvision==0.15.2
-transformers==4.31.0
-sqlalchemy==2.0.20
-python-dotenv==1.0.0
-gunicorn==21.2.0
-faiss-cpu==1.7.4
 git+https://github.com/openai/CLIP.git 

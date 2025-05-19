@@ -269,8 +269,9 @@ if __name__ == '__main__':
         print("Some functionality may not work correctly.")
         print("Please run 'python setup.py' to install all required dependencies.\n")
     
-    # Get port from environment variable (for Heroku compatibility)
-    port = int(os.environ.get('PORT', 5000))
+    # Use port 5002 by default on macOS to avoid AirPlay Receiver conflict
+    default_port = 5002 if sys.platform == 'darwin' else 5000
+    port = int(os.environ.get('FLASK_RUN_PORT', default_port))
     
     print(f"Server running on http://localhost:{port}")
-    app.run(debug=False, host='0.0.0.0', port=port) 
+    app.run(debug=True, host='0.0.0.0', port=port) 

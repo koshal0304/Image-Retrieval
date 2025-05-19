@@ -284,5 +284,18 @@
       "height": 650,
       "format": null
     }
+  },
+  {
+    "id": 23,
+    "path": "uploads/1747631847_Normal_posteroanterior_PA_chest_radiograph_X-ray.jpg",
+    "uploaded_at": "2025-05-19T10:47:27.768413",
+    "favorites": false,
+    "tags": [],
+    "description": "",
+    "metadata": {
+      "width": 1678,
+      "height": 1920,
+      "format": null
+    }
   }
 ]

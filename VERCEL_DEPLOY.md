@@ -1,89 +1,144 @@
 # Deploying to Vercel
 
-This application is configured to deploy to Vercel. Follow these steps for a successful deployment:
+This guide will help you deploy the Image Retrieval System to Vercel.
 
 ## Prerequisites
 
-1. A Vercel account (sign up at [vercel.com](https://vercel.com))
-2. Vercel CLI installed (optional, but helpful)
-   ```
-   npm install -g vercel
-   ```
+1. Install Vercel CLI:
+```bash
+npm install -g vercel
+```
+
+2. Make sure you have:
+- A Vercel account
+- Git installed
+- Node.js installed
+- Python 3.8+ installed
 
 ## Deployment Steps
 
-### 1. Using the Vercel Dashboard
+### 1. Prepare Your Environment
 
-1. Fork or clone this repository to your GitHub account
-2. Log in to your Vercel account
-3. Click "New Project"
-4. Import your GitHub repository
-5. Configure the project:
-   - Framework Preset: Other
-   - Root Directory: ./
-   - Build Command: None (it's configured in vercel.json)
-   - Output Directory: frontend/build
+1. Install dependencies:
+```bash
+# Backend dependencies
+pip install -r requirements.txt
 
-6. Click "Deploy"
+# Frontend dependencies
+cd frontend
+npm install
+npm run build
+cd ..
+```
 
-### 2. Using the Vercel CLI
+2. Create a `.env` file with necessary environment variables:
+```bash
+FLASK_ENV=production
+PYTHONPATH=.
+```
 
-1. Log in to Vercel CLI:
-   ```
-   vercel login
-   ```
+### 2. Deploy to Vercel
 
-2. Navigate to your project directory and run:
-   ```
-   vercel
-   ```
+1. Login to Vercel:
+```bash
+vercel login
+```
 
-3. Follow the prompts and your project will be deployed
+2. Deploy the application:
+```bash
+vercel
+```
 
-## Important Notes
+3. For production deployment:
+```bash
+vercel --prod
+```
 
-### Storage Limitations
+### 3. Environment Variables
 
-Vercel has some limitations for serverless functions:
+Set the following environment variables in your Vercel project settings:
 
-1. **Ephemeral filesystem**: Files you upload during runtime won't persist between function invocations. Consider using:
-   - A database service like MongoDB Atlas, Supabase, or Firebase
-   - A storage service like AWS S3, Cloudinary, or Vercel Blob Storage
+- `FLASK_ENV`: production
+- `PYTHONPATH`: .
+- Any other environment-specific variables
 
-2. **Function size limits**: Vercel has limits on the size of deployed functions:
-   - If deployment fails due to size limits, consider optimizing dependencies
-   - You might need to use a service like AWS Lambda with larger function limits
+### 4. Project Structure
 
-### Environment Variables
+Ensure your project structure follows this pattern:
+```
+/
+├── app.py
+├── vercel.json
+├── requirements.txt
+├── frontend/
+│   ├── package.json
+│   └── build/
+└── static/
+    └── uploads/
+```
 
-Set the following environment variables in the Vercel dashboard:
-- `PYTHON_VERSION`: 3.9 (recommended for best compatibility)
+### 5. Important Notes
 
-### Database Persistence
+1. **File Storage**: Vercel has a read-only filesystem. For file storage, you'll need to use:
+   - External storage service (e.g., AWS S3)
+   - Database storage
+   - Cloud storage solution
 
-For a production deployment, configure a persistent database:
-1. Set up a MongoDB Atlas, Supabase, or similar service
-2. Modify the database module to connect to your cloud database
-3. Add the connection string as an environment variable
+2. **Memory Limitations**: Vercel has memory limitations:
+   - Serverless functions: 1024MB RAM
+   - Maximum execution time: 10 seconds
 
-## Troubleshooting
+3. **Database**: Use an external database service:
+   - MongoDB Atlas
+   - PostgreSQL
+   - MySQL
 
-### Common Issues
+### 6. Troubleshooting
 
-1. **Deployment Timeouts**: If your build process times out:
-   - Reduce the size of dependencies
-   - Consider using a pre-built package for CLIP/FAISS
+1. **Build Failures**:
+   - Check build logs in Vercel dashboard
+   - Verify all dependencies are in requirements.txt
+   - Ensure Python version compatibility
 
-2. **Missing Dependencies**: If you see import errors:
-   - Check the logs to identify which dependency is missing
-   - Add the dependency to `api/requirements.txt`
+2. **Runtime Errors**:
+   - Check function logs in Vercel dashboard
+   - Verify environment variables
+   - Check file permissions
 
-3. **FAISS Installation Issues**: FAISS can be challenging to install in serverless environments:
-   - Consider using a cloud vector database like Pinecone or Weaviate instead
+3. **API Issues**:
+   - Verify API routes in vercel.json
+   - Check CORS settings
+   - Verify endpoint configurations
 
-### Getting Help
+### 7. Monitoring
 
-If you encounter issues with your Vercel deployment:
-1. Check the deployment logs in the Vercel dashboard
-2. Consult the [Vercel Documentation](https://vercel.com/docs)
-3. Consider deploying to a different platform if Vercel's limitations are too restrictive 
+1. Use Vercel Analytics to monitor:
+   - Performance
+   - Error rates
+   - API usage
+   - Build status
+
+2. Set up alerts for:
+   - Build failures
+   - Runtime errors
+   - Performance issues
+
+### 8. Maintenance
+
+1. Regular updates:
+   - Keep dependencies updated
+   - Monitor security advisories
+   - Update environment variables as needed
+
+2. Backup strategy:
+   - Regular database backups
+   - Configuration backups
+   - Environment variable backups
+
+## Support
+
+For issues or questions:
+1. Check Vercel documentation
+2. Review application logs
+3. Contact Vercel support
+4. Check GitHub issues 
