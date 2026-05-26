@@ -29,7 +29,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, alpha } from '@mui/material/styles';
-import api from '../api';
+import api, { baseURL } from '../api';
 
 // Styled components
 const StyledCard = styled(Card)(() => ({
@@ -143,7 +143,7 @@ function ImageCard({ image, onToggleFavorite, onDelete, delay = 0 }) {
 
   const imageUrl = image.path.startsWith('http')
     ? image.path
-    : `/static/${image.path}`;
+    : `${baseURL}/static/${image.path}`;
 
   return (
     <Fade in={visible} timeout={500}>
