@@ -10,4 +10,4 @@ services:
         value: production
       - key: PYTHONUNBUFFERED
         value: 1
-    healthCheckPath: /api/status
+    healthCheckPath: /health

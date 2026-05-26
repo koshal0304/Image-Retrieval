@@ -23,6 +23,13 @@ except ImportError as e:
 app = Flask(__name__, static_folder='static')
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+# Simple health check that responds immediately
+@app.route('/health', methods=['GET'])
+@app.route('/healthz', methods=['GET'])
+def health_check():
+    """Simple health check for Render"""
+    return jsonify({'status': 'healthy'}), 200
+
 # Configuration
 UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

@@ -20,15 +20,19 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Make start script executable
+RUN chmod +x start.sh
+
 # Create necessary directories
 RUN mkdir -p static/uploads index database
 
 # Set environment variables
 ENV FLASK_ENV=production
 ENV PYTHONUNBUFFERED=1
+ENV PORT=10000
 
-# Expose port (Render uses PORT environment variable)
+# Expose port
 EXPOSE 10000
 
-# Run the application with gunicorn for production
-CMD gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120 app:app
+# Run the application
+CMD ["./start.sh"]
