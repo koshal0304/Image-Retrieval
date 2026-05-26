@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import {
   Container,
@@ -11,7 +11,6 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Divider,
   Pagination,
   FormControl,
   InputLabel,
@@ -38,11 +37,7 @@ function ImageGallery() {
 
   const imagesPerPage = 12;
 
-  useEffect(() => {
-    fetchImages();
-  }, [page, sortBy, selectedTags]);
-
-  const fetchImages = async () => {
+  const fetchImages = useCallback(async () => {
     setLoading(true);
     setError('');
 
@@ -93,7 +88,11 @@ function ImageGallery() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, sortBy, selectedTags, searchTerm]);
+
+  useEffect(() => {
+    fetchImages();
+  }, [fetchImages]);
 
   const handleSearch = (e) => {
     e.preventDefault();

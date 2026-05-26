@@ -8,10 +8,8 @@ import {
   Paper,
   CircularProgress,
   Alert,
-  IconButton,
-  Button
+  IconButton
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ImageCard from '../components/ImageCard';
 

@@ -20,14 +20,10 @@ import {
   Card,
   CardMedia,
   CardContent,
-  IconButton,
-  Chip,
-  Tooltip
+  Chip
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
 import TuneIcon from '@mui/icons-material/Tune';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import ImageCard from '../components/ImageCard';
 
 function SearchPage() {

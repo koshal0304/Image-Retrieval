@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import {
   Container,
@@ -6,23 +6,16 @@ import {
   Box,
   Grid,
   Paper,
-  Card,
-  CardMedia,
-  CardContent,
-  Divider,
   CircularProgress,
   Button,
   Slider,
   Alert,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
-  IconButton,
-  Tooltip
+  AccordionDetails
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ImageCard from '../components/ImageCard';
 
 function CollectionsPage() {
@@ -34,7 +27,7 @@ function CollectionsPage() {
   const [selectedCluster, setSelectedCluster] = useState(null);
 
   // Fetch semantic clusters
-  const fetchClusters = async () => {
+  const fetchClusters = useCallback(async () => {
     setLoading(true);
     setError('');
 
@@ -48,12 +41,12 @@ function CollectionsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [numClusters]);
 
   // Load clusters on initial render
   useEffect(() => {
     fetchClusters();
-  }, []);
+  }, [fetchClusters]);
 
   const handleToggleFavorite = async (imageId) => {
     try {
