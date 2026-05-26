@@ -29,7 +29,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShareIcon from '@mui/icons-material/Share';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, alpha } from '@mui/material/styles';
-import axios from 'axios';
+import api from '../api';
 
 // Styled components
 const StyledCard = styled(Card)(() => ({
@@ -113,7 +113,7 @@ function ImageCard({ image, onToggleFavorite, onDelete, delay = 0 }) {
       onToggleFavorite(image.id);
     } else {
       try {
-        await axios.post(`/api/images/${image.id}/favorite`);
+        await api.post(`/api/images/${image.id}/favorite`);
         // If no callback provided, just toggle the UI state
         image.favorites = !image.favorites;
       } catch (error) {
@@ -272,25 +272,25 @@ function ImageCard({ image, onToggleFavorite, onDelete, delay = 0 }) {
         <Divider sx={{ mx: 2, opacity: 0.6 }} />
 
         <CardActions disableSpacing sx={{ px: 2, py: 1, bgcolor: 'background.default' }}>
-          <IconButton 
-            onClick={handleFavoriteClick} 
+          <IconButton
+            onClick={handleFavoriteClick}
             aria-label={image.favorites ? "Remove from favorites" : "Add to favorites"}
             color={image.favorites ? "secondary" : "default"}
             size="small"
           >
             {image.favorites ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
-          
+
           <IconButton aria-label="View full size" size="small">
             <VisibilityIcon />
           </IconButton>
-          
+
           <IconButton aria-label="Share image" size="small">
             <ShareIcon />
           </IconButton>
 
-          <IconButton 
-            aria-label="Delete image" 
+          <IconButton
+            aria-label="Delete image"
             size="small"
             onClick={handleDeleteClick}
             color="error"
@@ -298,7 +298,7 @@ function ImageCard({ image, onToggleFavorite, onDelete, delay = 0 }) {
           >
             <DeleteIcon />
           </IconButton>
-          
+
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}

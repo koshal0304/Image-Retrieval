@@ -17,7 +17,7 @@ import { useDropzone } from 'react-dropzone';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
+import api from '../api';
 import ImageCard from '../components/ImageCard';
 
 function UploadPage() {
@@ -29,7 +29,7 @@ function UploadPage() {
   const [newTag, setNewTag] = useState('');
   const [description, setDescription] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
-  
+
   const onDrop = useCallback(acceptedFiles => {
     setFiles(prevFiles => [
       ...prevFiles,
@@ -38,7 +38,7 @@ function UploadPage() {
       }))
     ]);
   }, []);
-  
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -46,38 +46,38 @@ function UploadPage() {
     },
     maxSize: 10485760 // 10MB
   });
-  
+
   const handleRemoveFile = (fileToRemove) => {
     setFiles(prevFiles => prevFiles.filter(file => file !== fileToRemove));
   };
-  
+
   const handleAddTag = () => {
     if (newTag.trim() && !tags.includes(newTag.trim())) {
       setTags(prevTags => [...prevTags, newTag.trim()]);
       setNewTag('');
     }
   };
-  
+
   const handleRemoveTag = (tagToRemove) => {
     setTags(prevTags => prevTags.filter(tag => tag !== tagToRemove));
   };
-  
+
   const handleUpload = async () => {
     if (files.length === 0) {
       setError('Please select at least one image to upload');
       return;
     }
-    
+
     setUploading(true);
     setError('');
     setSuccess('');
-    
+
     const successfulUploads = [];
-    
+
     for (const file of files) {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       // Add metadata
       if (description) {
         formData.append('description', description);
@@ -85,23 +85,23 @@ function UploadPage() {
       if (tags.length > 0) {
         formData.append('tags', JSON.stringify(tags));
       }
-      
+
       try {
-        const response = await axios.post('/api/upload', formData, {
+        const response = await api.post('/api/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-        
+
         successfulUploads.push(response.data.image);
       } catch (err) {
         console.error('Upload error:', err);
         setError(`Failed to upload ${file.name}. ${err.response?.data?.error || ''}`);
       }
     }
-    
+
     setUploading(false);
-    
+
     if (successfulUploads.length > 0) {
       setSuccess(`Successfully uploaded ${successfulUploads.length} images.`);
       setFiles([]);
@@ -109,7 +109,7 @@ function UploadPage() {
       setUploadedImages(prev => [...successfulUploads, ...prev]);
     }
   };
-  
+
   return (
     <Container maxWidth="lg">
       <Typography
@@ -121,7 +121,7 @@ function UploadPage() {
       >
         Upload Images
       </Typography>
-      
+
       <Paper
         elevation={3}
         sx={{ p: 3, mb: 4, borderRadius: 2 }}
@@ -129,7 +129,7 @@ function UploadPage() {
         <Typography variant="h6" gutterBottom>
           Add Images to Database
         </Typography>
-        
+
         <Box
           {...getRootProps()}
           sx={{
@@ -161,7 +161,7 @@ function UploadPage() {
             Supports JPEG, PNG, and GIF formats (max 10MB)
           </Typography>
         </Box>
-        
+
         {files.length > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" gutterBottom>
@@ -170,30 +170,30 @@ function UploadPage() {
             <Grid container spacing={2}>
               {files.map((file, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
-                  <Paper 
-                    elevation={2} 
-                    sx={{ 
-                      p: 1, 
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      alignItems: 'center' 
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center'
                     }}
                   >
-                    <Box 
-                      component="img" 
-                      src={file.preview} 
+                    <Box
+                      component="img"
+                      src={file.preview}
                       alt={file.name}
-                      sx={{ 
-                        width: '100%', 
-                        height: 150, 
+                      sx={{
+                        width: '100%',
+                        height: 150,
                         objectFit: 'cover',
                         borderRadius: 1
                       }}
                     />
-                    <Box 
-                      sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                         width: '100%',
                         mt: 1
@@ -202,8 +202,8 @@ function UploadPage() {
                       <Typography variant="body2" noWrap sx={{ maxWidth: '70%' }}>
                         {file.name}
                       </Typography>
-                      <IconButton 
-                        size="small" 
+                      <IconButton
+                        size="small"
                         onClick={() => handleRemoveFile(file)}
                         color="error"
                       >
@@ -216,7 +216,7 @@ function UploadPage() {
             </Grid>
           </Box>
         )}
-        
+
         <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle1" gutterBottom>
             Image Metadata
@@ -229,7 +229,7 @@ function UploadPage() {
             onChange={(e) => setDescription(e.target.value)}
             sx={{ mb: 2 }}
           />
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
             <TextField
               label="Add Tags"
@@ -254,7 +254,7 @@ function UploadPage() {
               Add
             </Button>
           </Box>
-          
+
           {tags.length > 0 && (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
               {tags.map((tag, index) => (
@@ -269,7 +269,7 @@ function UploadPage() {
             </Box>
           )}
         </Box>
-        
+
         <Button
           variant="contained"
           color="primary"
@@ -280,19 +280,19 @@ function UploadPage() {
           {uploading ? 'Uploading...' : 'Upload Images'}
         </Button>
       </Paper>
-      
+
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
-      
+
       {success && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {success}
         </Alert>
       )}
-      
+
       {uploadedImages.length > 0 && (
         <>
           <Divider sx={{ my: 3 }} />

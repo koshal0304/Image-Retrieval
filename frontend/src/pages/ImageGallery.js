@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import {
   Container,
   Typography,
@@ -35,21 +35,21 @@ function ImageGallery() {
   const [sortBy, setSortBy] = useState('newest');
   const [selectedTags, setSelectedTags] = useState([]);
   const [allTags, setAllTags] = useState([]);
-  
+
   const imagesPerPage = 12;
-  
+
   useEffect(() => {
     fetchImages();
   }, [page, sortBy, selectedTags]);
-  
+
   const fetchImages = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
-      const response = await axios.get('/api/images');
+      const response = await api.get('/api/images');
       let filteredImages = response.data.images;
-      
+
       // Extract all unique tags
       const tags = new Set();
       filteredImages.forEach(img => {
@@ -58,34 +58,34 @@ function ImageGallery() {
         }
       });
       setAllTags(Array.from(tags));
-      
+
       // Filter by search term if provided
       if (searchTerm.trim()) {
-        filteredImages = filteredImages.filter(img => 
+        filteredImages = filteredImages.filter(img =>
           img.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           img.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
         );
       }
-      
+
       // Filter by selected tags
       if (selectedTags.length > 0) {
-        filteredImages = filteredImages.filter(img => 
+        filteredImages = filteredImages.filter(img =>
           selectedTags.every(tag => img.tags?.includes(tag))
         );
       }
-      
+
       // Sort images
       if (sortBy === 'newest') {
         filteredImages.sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at));
       } else if (sortBy === 'oldest') {
         filteredImages.sort((a, b) => new Date(a.uploaded_at) - new Date(b.uploaded_at));
       }
-      
+
       // Pagination
       setTotalPages(Math.ceil(filteredImages.length / imagesPerPage));
       const startIndex = (page - 1) * imagesPerPage;
       const paginatedImages = filteredImages.slice(startIndex, startIndex + imagesPerPage);
-      
+
       setImages(paginatedImages);
     } catch (err) {
       console.error('Error fetching images:', err);
@@ -94,13 +94,13 @@ function ImageGallery() {
       setLoading(false);
     }
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
     fetchImages();
   };
-  
+
   const handleTagSelect = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter(t => t !== tag));
@@ -109,43 +109,43 @@ function ImageGallery() {
     }
     setPage(1);
   };
-  
+
   const handleClearFilters = () => {
     setSearchTerm('');
     setSelectedTags([]);
     setPage(1);
     setSortBy('newest');
   };
-  
+
   const handleToggleFavorite = async (imageId) => {
     try {
-      const response = await axios.post(`/api/images/${imageId}/favorite`);
-      
+      const response = await api.post(`/api/images/${imageId}/favorite`);
+
       // Update the image in the current state
-      setImages(prevImages => prevImages.map(img => 
-        img.id === imageId ? {...img, favorites: response.data.image.favorites} : img
+      setImages(prevImages => prevImages.map(img =>
+        img.id === imageId ? { ...img, favorites: response.data.image.favorites } : img
       ));
     } catch (error) {
       console.error('Error toggling favorite:', error);
     }
   };
-  
+
   // Handle image deletion
   const handleDeleteImage = async (imageId) => {
     try {
-      await axios.delete(`/api/images/${imageId}`);
-      
+      await api.delete(`/api/images/${imageId}`);
+
       // Remove the image from the current state
       setImages(images.filter(img => img.id !== imageId));
-      
+
       // Show success message
       setSuccessMessage('Image deleted successfully');
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccessMessage('');
       }, 3000);
-      
+
       // If this is the last image in the current page and not the first page, go to the previous page
       if (images.length === 1 && page > 1) {
         setPage(page - 1);
@@ -156,14 +156,14 @@ function ImageGallery() {
     } catch (error) {
       console.error('Error deleting image:', error);
       setError('Failed to delete image. Please try again later.');
-      
+
       // Clear error message after 3 seconds
       setTimeout(() => {
         setError('');
       }, 3000);
     }
   };
-  
+
   return (
     <Container maxWidth="lg">
       <Typography
@@ -175,7 +175,7 @@ function ImageGallery() {
       >
         Image Gallery
       </Typography>
-      
+
       <Paper
         elevation={3}
         sx={{ p: 3, mb: 4, borderRadius: 2 }}
@@ -185,7 +185,7 @@ function ImageGallery() {
             Browse Images
             {loading && <CircularProgress size={20} sx={{ ml: 2 }} />}
           </Typography>
-          
+
           <FormControl sx={{ minWidth: 150, mr: 2 }}>
             <InputLabel id="sort-select-label">Sort By</InputLabel>
             <Select
@@ -199,12 +199,12 @@ function ImageGallery() {
               <MenuItem value="oldest">Oldest First</MenuItem>
             </Select>
           </FormControl>
-          
+
           <IconButton onClick={handleClearFilters} color="primary" title="Clear all filters">
             <ClearIcon />
           </IconButton>
         </Box>
-        
+
         <Box component="form" onSubmit={handleSearch} sx={{ mb: 3 }}>
           <TextField
             fullWidth
@@ -229,7 +229,7 @@ function ImageGallery() {
             size="small"
           />
         </Box>
-        
+
         {allTags.length > 0 && (
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
@@ -251,19 +251,19 @@ function ImageGallery() {
           </Box>
         )}
       </Paper>
-      
+
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
-      
+
       {successMessage && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {successMessage}
         </Alert>
       )}
-      
+
       {!loading && images.length === 0 ? (
         <Alert severity="info" sx={{ mb: 2 }}>
           No images found. Try adjusting your filters or upload some images.
@@ -273,21 +273,21 @@ function ImageGallery() {
           <Grid container spacing={3}>
             {images.map((image) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={image.id}>
-                <ImageCard 
-                  image={image} 
+                <ImageCard
+                  image={image}
                   onToggleFavorite={handleToggleFavorite}
                   onDelete={handleDeleteImage}
                 />
               </Grid>
             ))}
           </Grid>
-          
+
           {totalPages > 1 && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination 
-                count={totalPages} 
-                page={page} 
-                onChange={(_, value) => setPage(value)} 
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_, value) => setPage(value)}
                 color="primary"
                 size="large"
               />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import {
   Container,
   Typography,
@@ -43,13 +43,13 @@ function SearchPage() {
   const [advancedMode, setAdvancedMode] = useState(false);
   const [allImages, setAllImages] = useState([]);
   const [loadingImages, setLoadingImages] = useState(false);
-  
+
   // Fetch all images for reference selection
   useEffect(() => {
     const fetchImages = async () => {
       setLoadingImages(true);
       try {
-        const response = await axios.get('/api/images');
+        const response = await api.get('/api/images');
         setAllImages(response.data.images || []);
       } catch (err) {
         console.error('Error fetching images:', err);
@@ -57,52 +57,52 @@ function SearchPage() {
         setLoadingImages(false);
       }
     };
-    
+
     fetchImages();
   }, []);
-  
+
   const handleSearch = async (e) => {
     e.preventDefault();
-    
+
     if (!query.trim() && referenceImage === null) {
       setError('Please enter a search query or select a reference image');
       return;
     }
-    
+
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
       const searchParams = {
         limit
       };
-      
+
       // Add query if provided
       if (query.trim()) {
         searchParams.query = query.trim();
       }
-      
+
       // Add image reference if selected
       if (referenceImage !== null) {
         searchParams.imageId = referenceImage;
         searchParams.weightText = weightText;
       }
-      
-      const response = await axios.post('/api/search', searchParams);
-      
+
+      const response = await api.post('/api/search', searchParams);
+
       if (response.data.results.length === 0) {
         setSuccess('No images found matching your query. Try a different description or upload some images.');
       } else {
         setSuccess(`Found ${response.data.results.length} images matching your query.`);
       }
-      
+
       // Sort results
       let sortedResults = [...response.data.results];
       if (sortBy === 'score') {
         sortedResults.sort((a, b) => b.score - a.score);
       }
-      
+
       setResults(sortedResults);
     } catch (err) {
       console.error('Search error:', err);
@@ -111,12 +111,12 @@ function SearchPage() {
       setLoading(false);
     }
   };
-  
+
   const handleToggleFavorite = async (imageId) => {
     try {
-      await axios.post(`/api/images/${imageId}/favorite`);
-      setResults(prevResults => prevResults.map(img => 
-        img.id === imageId 
+      await api.post(`/api/images/${imageId}/favorite`);
+      setResults(prevResults => prevResults.map(img =>
+        img.id === imageId
           ? { ...img, favorites: !img.favorites }
           : img
       ));
@@ -124,36 +124,36 @@ function SearchPage() {
       console.error('Error toggling favorite:', error);
     }
   };
-  
+
   const handleSelectReferenceImage = (imageId) => {
     setReferenceImage(imageId === referenceImage ? null : imageId);
   };
-  
+
   const clearReferenceImage = () => {
     setReferenceImage(null);
   };
-  
+
   const toggleAdvancedMode = () => {
     setAdvancedMode(!advancedMode);
   };
-  
+
   const getSelectedImageDetails = () => {
     if (referenceImage === null) return null;
     return allImages.find(img => img.id === referenceImage);
   };
-  
+
   const selectedImage = getSelectedImageDetails();
-  
+
   // Handle image deletion
   const handleDeleteImage = async (imageId) => {
     try {
-      await axios.delete(`/api/images/${imageId}`);
-      
+      await api.delete(`/api/images/${imageId}`);
+
       // Remove the image from results
       setResults(results.filter(img => img.id !== imageId));
-      
+
       setSuccess('Image deleted successfully');
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess('');
@@ -161,14 +161,14 @@ function SearchPage() {
     } catch (error) {
       console.error('Error deleting image:', error);
       setError('Failed to delete image. Please try again later.');
-      
+
       // Clear error message after 3 seconds
       setTimeout(() => {
         setError('');
       }, 3000);
     }
   };
-  
+
   return (
     <Container maxWidth="lg">
       <Typography
@@ -180,7 +180,7 @@ function SearchPage() {
       >
         Image Search
       </Typography>
-      
+
       <Paper
         component="form"
         onSubmit={handleSearch}
@@ -191,9 +191,9 @@ function SearchPage() {
           <Typography variant="h6">
             Search for Images
           </Typography>
-          <Button 
-            variant="outlined" 
-            color="primary" 
+          <Button
+            variant="outlined"
+            color="primary"
             startIcon={<TuneIcon />}
             onClick={toggleAdvancedMode}
             size="small"
@@ -201,13 +201,13 @@ function SearchPage() {
             {advancedMode ? 'Simple Search' : 'Advanced Search'}
           </Button>
         </Box>
-        
+
         <Typography variant="body2" color="text.secondary" paragraph>
-          {advancedMode 
+          {advancedMode
             ? 'Combine text search with a reference image for more precise results'
             : 'Enter a descriptive prompt like "sunset over mountains" or "a cat playing with a ball"'}
         </Typography>
-        
+
         <TextField
           fullWidth
           variant="outlined"
@@ -223,19 +223,19 @@ function SearchPage() {
             ),
           }}
         />
-        
+
         {advancedMode && (
           <>
             <Box sx={{ mb: 3 }}>
               <Typography gutterBottom>
-                Reference Image {selectedImage && <Chip 
-                  size="small" 
-                  label="Selected" 
-                  color="primary" 
+                Reference Image {selectedImage && <Chip
+                  size="small"
+                  label="Selected"
+                  color="primary"
                   onDelete={clearReferenceImage}
                 />}
               </Typography>
-              
+
               {selectedImage && (
                 <Card sx={{ mb: 2, maxWidth: 200 }}>
                   <CardMedia
@@ -251,14 +251,14 @@ function SearchPage() {
                   </CardContent>
                 </Card>
               )}
-              
+
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 Select a reference image to find visually similar images
               </Typography>
-              
-              <Box sx={{ 
-                maxHeight: 150, 
-                overflowY: 'auto', 
+
+              <Box sx={{
+                maxHeight: 150,
+                overflowY: 'auto',
                 display: 'flex',
                 flexWrap: 'nowrap',
                 gap: 1,
@@ -276,10 +276,10 @@ function SearchPage() {
                   <CircularProgress size={24} />
                 ) : (
                   allImages.map((image) => (
-                    <Card 
-                      key={image.id} 
-                      sx={{ 
-                        minWidth: 100, 
+                    <Card
+                      key={image.id}
+                      sx={{
+                        minWidth: 100,
                         width: 100,
                         border: referenceImage === image.id ? '2px solid #1976d2' : 'none',
                         cursor: 'pointer'
@@ -297,11 +297,11 @@ function SearchPage() {
                 )}
               </Box>
             </Box>
-            
+
             {referenceImage !== null && (
               <Box sx={{ mb: 3 }}>
                 <Typography gutterBottom>
-                  Text vs. Image Weight: {Math.round(weightText * 100)}% Text / {Math.round((1-weightText) * 100)}% Image
+                  Text vs. Image Weight: {Math.round(weightText * 100)}% Text / {Math.round((1 - weightText) * 100)}% Image
                 </Typography>
                 <Slider
                   value={weightText}
@@ -317,7 +317,7 @@ function SearchPage() {
             )}
           </>
         )}
-        
+
         <Box sx={{ mb: 2 }}>
           <Typography gutterBottom>Results Limit: {limit}</Typography>
           <Slider
@@ -330,7 +330,7 @@ function SearchPage() {
             aria-labelledby="results-limit-slider"
           />
         </Box>
-        
+
         <Box sx={{ mb: 2 }}>
           <FormControl sx={{ minWidth: 120 }}>
             <InputLabel id="sort-select-label">Sort By</InputLabel>
@@ -344,7 +344,7 @@ function SearchPage() {
             </Select>
           </FormControl>
         </Box>
-        
+
         <Button
           type="submit"
           variant="contained"
@@ -356,19 +356,19 @@ function SearchPage() {
           {loading ? 'Searching...' : 'Search'}
         </Button>
       </Paper>
-      
+
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
-      
+
       {success && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {success}
         </Alert>
       )}
-      
+
       {results.length > 0 && (
         <>
           <Divider sx={{ my: 3 }} />
@@ -378,9 +378,9 @@ function SearchPage() {
           <Grid container spacing={3}>
             {results.map((image) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={image.id}>
-                <ImageCard 
-                  image={image} 
-                  onToggleFavorite={handleToggleFavorite} 
+                <ImageCard
+                  image={image}
+                  onToggleFavorite={handleToggleFavorite}
                   onDelete={handleDeleteImage}
                 />
               </Grid>

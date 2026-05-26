@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import {
   Container,
   Typography,
@@ -20,17 +20,17 @@ function FavoritesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  
+
   useEffect(() => {
     fetchFavorites();
   }, []);
-  
+
   const fetchFavorites = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
-      const response = await axios.get('/api/favorites');
+      const response = await api.get('/api/favorites');
       setFavorites(response.data.images);
     } catch (err) {
       console.error('Error fetching favorites:', err);
@@ -39,10 +39,10 @@ function FavoritesPage() {
       setLoading(false);
     }
   };
-  
+
   const handleToggleFavorite = async (imageId) => {
     try {
-      await axios.post(`/api/images/${imageId}/favorite`);
+      await api.post(`/api/images/${imageId}/favorite`);
       // Remove the image from favorites
       setFavorites(prevFavorites => prevFavorites.filter(img => img.id !== imageId));
     } catch (error) {
@@ -50,16 +50,16 @@ function FavoritesPage() {
       setError('Failed to update favorite status. Please try again.');
     }
   };
-  
+
   const handleDeleteImage = async (imageId) => {
     try {
-      await axios.delete(`/api/images/${imageId}`);
-      
+      await api.delete(`/api/images/${imageId}`);
+
       // Remove the image from favorites
       setFavorites(favorites.filter(img => img.id !== imageId));
-      
+
       setSuccessMessage('Image deleted successfully');
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccessMessage('');
@@ -67,14 +67,14 @@ function FavoritesPage() {
     } catch (error) {
       console.error('Error deleting image:', error);
       setError('Failed to delete image. Please try again later.');
-      
+
       // Clear error message after 3 seconds
       setTimeout(() => {
         setError('');
       }, 3000);
     }
   };
-  
+
   return (
     <Container maxWidth="lg">
       <Typography
@@ -86,7 +86,7 @@ function FavoritesPage() {
       >
         Favorite Images
       </Typography>
-      
+
       <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -97,24 +97,24 @@ function FavoritesPage() {
             <FavoriteIcon />
           </IconButton>
         </Box>
-        
+
         <Typography variant="body2" color="text.secondary" paragraph>
           Images you've marked as favorites for quick access. Click the heart icon to remove an image from favorites.
         </Typography>
       </Paper>
-      
+
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
-      
+
       {successMessage && (
         <Alert severity="success" sx={{ mb: 2 }}>
           {successMessage}
         </Alert>
       )}
-      
+
       {!loading && favorites.length === 0 ? (
         <Alert severity="info" sx={{ mb: 2 }}>
           You haven't favorited any images yet. Browse the gallery and click the heart icon to add images to your favorites.
@@ -123,9 +123,9 @@ function FavoritesPage() {
         <Grid container spacing={3}>
           {favorites.map((image) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={image.id}>
-              <ImageCard 
-                image={image} 
-                onToggleFavorite={handleToggleFavorite} 
+              <ImageCard
+                image={image}
+                onToggleFavorite={handleToggleFavorite}
                 onDelete={handleDeleteImage}
               />
             </Grid>

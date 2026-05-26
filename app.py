@@ -21,7 +21,7 @@ except ImportError as e:
     MODULES_LOADED = False
 
 app = Flask(__name__, static_folder='static')
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Configuration
 UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads')
